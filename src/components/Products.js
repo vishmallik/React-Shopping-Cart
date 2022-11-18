@@ -3,32 +3,19 @@ import { connect } from "react-redux";
 import OrderBy from "./OrderBy";
 
 function Products(props) {
-  function handleOrderProducts(order, products) {
-    let sortedProducts = [...products];
-    if (order === "highest") {
-      sortedProducts = sortedProducts.sort((a, b) => b.price - a.price);
-    }
-    if (order === "lowest") {
-      sortedProducts = sortedProducts.sort((a, b) => a.price - b.price);
-    }
-    return sortedProducts;
-  }
-
-  let products = handleOrderProducts(props.selectedOrder, props.data);
-
   return (
     <div>
       <div className="products-filter">
         <p>
-          {`${props.data.length} Product${
-            props.data.length > 1 ? "s" : ""
+          {`${props.products.length} Product${
+            props.products.length > 1 ? "s" : ""
           } found.`}{" "}
         </p>
         <OrderBy />
       </div>
       <div className="flex wrap">
-        {products.map((product) => (
-          <Product {...product} />
+        {props.products.map((product) => (
+          <Product key={product.sku} {...product} />
         ))}
       </div>
     </div>
@@ -58,6 +45,7 @@ function Product(props) {
 function mapStateToProps(state) {
   return {
     selectedOrder: state.selectedOrder,
+    products: state.products,
   };
 }
 export default connect(mapStateToProps)(Products);
